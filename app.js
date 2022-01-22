@@ -27,7 +27,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://admin-numan:hello@cluster0.asyoc.mongodb.net/secrets?retryWrites=true&w=majority", {useNewUrlParser: true});
+mongoose.connect(process.env.db_Url);
 mongoose.set("useCreateIndex", true);
 
 const userSchema = new mongoose.Schema ({
@@ -55,10 +55,10 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new GoogleStrategy({
-  clientID:"560768197808-mur1p64ibglu85dndtbrf7qhdioa82i6.apps.googleusercontent.com",
-  clientSecret:"7OOLrGhqBgWoO1XBVBXhGO8q",
-  callbackURL: "http://localhost:3000/auth/google/secrets",
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  clientID:process.env.clientID,
+  clientSecret:process.env.clientSecret,
+  callbackURL:process.env.callbackURL,
+    userProfileURL:process.env.userProfileURL
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
@@ -182,9 +182,9 @@ app.post("/login", function(req, res){
 
 
 
+const PORT= process.env.port||3000;
 
 
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000.");
+app.listen(PORT, function() {
+  console.log(`Server started on port ${PORT}.`);
 });
